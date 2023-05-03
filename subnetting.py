@@ -1,3 +1,4 @@
+
 def subnetting(ip, mask, n):
     # Convertir la dirección IP y la máscara de subred a binario
     ip_bin = ''.join([bin(int(x)+256)[3:] for x in ip.split('.')])
@@ -28,3 +29,4 @@ def subnetting(ip, mask, n):
 
 subnets = subnetting('192.168.1.0', '255.255.255.0', 4)
 print(subnets)
+print("esta es mi segunda prueba")

@@ -81,6 +81,22 @@ print(str(decimal_a_binario(int(mascara_vector[0]))).zfill(8))
 print(str(decimal_a_binario(int(mascara_vector[1]))).zfill(8))
 print(str(decimal_a_binario(int(mascara_vector[2]))).zfill(8))
 print(str(decimal_a_binario(int(mascara_vector[3]))).zfill(8))
+lista3=[]
+host_1=int(host)
+host_1 = host_1 +bits
+cadena=""
+for i in range(host_1):
+    cadena = cadena + "1"
+print(cadena[17])
+
+
+cadena.zfill(32)    
+#for i in range(4):
+#    if str(decimal_a_binario(int(mascara_vector[i]))) != "00000000":
+#        lista3.append(str(decimal_a_binario(int(mascara_vector[i]))))
+
+#print(lista3)    
+
 
 def cambio_mascara():
     print(mascara)

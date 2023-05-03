@@ -30,3 +30,28 @@ print(mascara)
 
 print(ipv4)
 print(list1)
+
+numero_decimal1 = int(ipv4_vector[0])
+
+#modulos = [] 
+
+def decimal_a_binario(numero_decimal):
+    numero_binario = 0
+    multiplicador = 1
+
+    while numero_decimal != 0:
+        numero_binario = numero_binario + numero_decimal % 2 * multiplicador
+        numero_decimal //= 2
+        multiplicador *= 10
+
+    return numero_binario
+
+
+
+
+
+print(decimal_a_binario(numero_decimal1))
+
+
+#numero_bin= ''.join(modulos)
+#print(numero_bin)

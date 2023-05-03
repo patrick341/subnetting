@@ -32,6 +32,9 @@ print(ipv4)
 print(list1)
 
 numero_decimal1 = int(ipv4_vector[0])
+numero_decimal2 = int(ipv4_vector[1])
+numero_decimal3 = int(ipv4_vector[2])
+numero_decimal4 = int(ipv4_vector[3])
 
 #modulos = [] 
 
@@ -50,7 +53,42 @@ def decimal_a_binario(numero_decimal):
 
 
 
-print(decimal_a_binario(numero_decimal1))
+print(str(decimal_a_binario(numero_decimal1)).zfill(8))
+print(str(decimal_a_binario(numero_decimal2)).zfill(8))
+print(str(decimal_a_binario(numero_decimal3)).zfill(8))
+print(str(decimal_a_binario(numero_decimal4)).zfill(8))
+for i in range(4):
+    list1.append(str(decimal_a_binario(int(ipv4_vector[i]))).zfill(8))
+
+print(list1)
+
+
+def saber_n(a):
+    flag=True
+    c=0
+    while ( flag == True):
+        if 2**c >= int(a):
+            flag = False
+        else:
+            c=c+1
+            flag = True
+    return c 
+
+mascara_vector=mascara.split('.')
+bits = saber_n(subred)
+print(saber_n(subred))        
+print(str(decimal_a_binario(int(mascara_vector[0]))).zfill(8))
+print(str(decimal_a_binario(int(mascara_vector[1]))).zfill(8))
+print(str(decimal_a_binario(int(mascara_vector[2]))).zfill(8))
+print(str(decimal_a_binario(int(mascara_vector[3]))).zfill(8))
+
+def cambio_mascara():
+    print(mascara)
+    decimal_a_binario(int(mascara[0]))
+    decimal_a_binario(int(mascara[1]))
+    decimal_a_binario(int(mascara[2]))
+    decimal_a_binario(int(mascara[3]))
+
 
 
 #numero_bin= ''.join(modulos)

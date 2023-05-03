@@ -1,32 +1,32 @@
 
-def subnetting(ip, mask, n):
-    # Convertir la dirección IP y la máscara de subred a binario
-    ip_bin = ''.join([bin(int(x)+256)[3:] for x in ip.split('.')])
-    mask_bin = ''.join([bin(int(x)+256)[3:] for x in mask.split('.')])
-    
-    # Calcular la longitud de la máscara de subred en bits
-    mask_len = mask_bin.count('1')
-    
-    # Calcular el número de hosts por subred
-    hosts_per_subnet = 2**(32-mask_len) // n
-    
-    # Crear la lista de subredes
-    subnets = []
-    for i in range(n):
-        # Calcular la dirección de red y de broadcast de la subred
-        subnet_id = ip_bin[:mask_len] + bin(i*hosts_per_subnet)[2:].zfill(32-mask_len)
-        broadcast_id = ip_bin[:mask_len] + bin((i+1)*hosts_per_subnet-1)[2:].zfill(32-mask_len)
-        
-        # Convertir la dirección de red y de broadcast de la subred a decimal
-        subnet_id_dec = '.'.join([str(int(subnet_id[i:i+8], 2)) for i in range(0, 32, 8)])
-        broadcast_id_dec = '.'.join([str(int(broadcast_id[i:i+8], 2)) for i in range(0, 32, 8)])
-        
-        # Añadir la subred a la lista
-        subnets.append((subnet_id_dec, broadcast_id_dec))
-    
-    return subnets
+ipv4=input("Ingrese la direccion ip:  ")
+host=input("Ingrese la cantidad de espacios ocupados para la net:  ")
+subred=input("Ingrese la cantidada de subredes:  ")
+hosts=input("Cantidad maxima de host:  ")
+list1=[]
+ipv4_vector=ipv4.split('.')
+print(ipv4_vector)  
+if int(ipv4_vector[0])>0 and int(ipv4_vector[0])<128 :
+    clase="A"
+    print(clase)
+    print("su mascara por defecto es 255.0.0.0")
+    mascara="255.0.0.0"
+elif int(ipv4_vector[0])>127 and int(ipv4_vector[0])<192:
+    clase="B"
+    print(clase)
+    print("su mascara por defecto es 255.255.0.0")
+    mascara="255.255.0.0"
+elif int(ipv4_vector[0])>191 and int(ipv4_vector[0])<224:
+    clase="C"
+    print(clase)
+    print("su mascara por defecto es 255.255.255.0")
+    mascara="255.255.255.0"
+       
+for i in ipv4:
+    i=ipv4.split('.')
 
+print(clase)
+print(mascara)
 
-subnets = subnetting('192.168.1.0', '255.255.255.0', 4)
-print(subnets)
-print("esta es mi segunda prueba")
+print(ipv4)
+print(list1)

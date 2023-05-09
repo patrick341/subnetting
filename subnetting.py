@@ -223,7 +223,7 @@ for i in range(int(subred)):
     direccion_ultima_subred_bin = direccion_broadcast_bin[:32-bits_disponibles] + '1'*bits_disponibles
 
 '''
-
+'''
 import re
 
 def obtener_mascara_red(num_bits_subredes=None, num_bits_hosts=None):
@@ -401,3 +401,164 @@ def subnetting(direccion_ip, num_subredes, max_host):
 
     return rangos 
 subnetting("192.168.1.0",2,10)
+'''
+
+'''
+import ipaddress
+
+# Obtener la dirección IP y la cantidad de subredes y hosts máximos del usuario
+ip_address = input("Ingrese dirección IP: ")
+num_subnets = int(input("Cantidad de subredes: "))
+max_hosts = int(input("Cantidad máxima de hosts: "))
+
+# Convertir la dirección IP a un objeto de dirección de red
+network = ipaddress.IPv4Network(ip_address)
+
+# Calcular la máscara de subred y la cantidad de bits de host necesarios para cumplir con los requisitos del usuario
+prefix_length = network.prefixlen
+while True:
+    # Calcular la cantidad de bits de host necesarios para acomodar la cantidad máxima de hosts por subred
+    bits_needed = (max_hosts + 2).bit_length()  # Se suma 2 para la dirección de red y la de broadcast
+    new_prefix_length = prefix_length + bits_needed
+    new_prefix_length = 32 - (2**subnet_bits - num_subnets).bit_length()
+    new_network = ipaddress.IPv4Network((network.network_address, new_prefix_length))
+    subnet_bits = new_prefix_length - prefix_length
+    # Comprobar si el número de subredes es menor o igual al número de subredes posibles con la nueva máscara de subred
+    if num_subnets <= 2**(new_prefix_length-prefix_length):
+        break
+    # Si no, incrementar la máscara de subred y seguir intentando
+    prefix_length += 1
+
+# Obtener la nueva máscara de subred y el número de bits de host
+new_network = ipaddress.IPv4Network((network.network_address, new_prefix_length))
+subnet_bits = new_prefix_length - prefix_length
+
+# Imprimir los resultados
+print(f"Máscara de subred: {new_network.netmask}")
+print(f"Cantidad de bits de host: {subnet_bits}")
+
+# Calcular las subredes y los saltos correspondientes
+print("Subredes:")
+for i, subnet in enumerate(new_network.subnets(num_subnets), 1):
+    print(f"Subred {i}: {subnet}")
+    # Calcular el salto correspondiente y la cantidad de hosts disponibles en la subred
+    jump = 2**(32-new_prefix_length)
+    num_hosts = 2**(32-new_prefix_length-subnet_bits)-2  # Se restan 2 para la dirección de red y la de broadcast
+    print(f"Saltos: {jump}")
+    print(f"Cantidad de hosts: {num_hosts}")
+'''
+'''
+import ipaddress
+
+# Obtener la dirección IP y la cantidad de subredes y hosts máximos del usuario
+while True:
+    try:
+        ip_address = input("Ingrese dirección IP: ")
+        network = ipaddress.IPv4Network(ip_address)
+        break
+    except ValueError:
+        print("Dirección IP inválida. Inténtelo de nuevo.")
+
+while True:
+    try:
+        num_subnets = int(input("Cantidad de subredes: "))
+        if num_subnets <= 0:
+            raise ValueError
+        break
+    except ValueError:
+        print("La cantidad de subredes debe ser un número entero positivo. Inténtelo de nuevo.")
+
+while True:
+    try:
+        max_hosts = int(input("Cantidad máxima de hosts: "))
+        if max_hosts <= 0:
+            raise ValueError
+        break
+    except ValueError:
+        print("La cantidad máxima de hosts debe ser un número entero positivo. Inténtelo de nuevo.")
+
+# Calcular la máscara de subred y la cantidad de bits de host necesarios para cumplir con los requisitos del usuario
+prefix_length = network.prefixlen
+
+def bits_needed(max_hosts):
+    return (max_hosts + 2).bit_length()  # Se suma 2 para la dirección de red y la de broadcast
+
+while True:
+    bits_needed_ = bits_needed(max_hosts)
+    new_prefix_length = prefix_length + bits_needed_
+    # Comprobar si el número de subredes es menor o igual al número de subredes posibles con la nueva máscara de subred
+    if num_subnets <= 2**(new_prefix_length-prefix_length):
+        break
+    # Si no, incrementar la máscara de subred y seguir intentando
+    prefix_length += 1
+
+# Validación de límites
+if new_prefix_length > 32:
+    raise ValueError("No se puede acomodar la cantidad de subredes y hosts máximos con una dirección IPv4.")
+
+# Obtener la nueva máscara de subred y el número de bits de host
+new_network = ipaddress.IPv4Network((network.network_address, new_prefix_length))
+subnet_bits = new_prefix_length - prefix_length
+
+# Imprimir los resultados
+print(f"Máscara de subred: {new_network.netmask}")
+print(f"Cantidad de bits de host: {subnet_bits}")
+
+# Calcular las subredes y los saltos correspondientes
+print("Subredes:")
+for i, subnet in enumerate(new_network.subnets(num_subnets), 1):
+    jump = 2**(32-new_prefix_length)
+    #num_hosts = 2**(32-new_prefix_length-subnet_bits)-2  # Se restan 2 para la dirección de red y la de broadcast
+    # Calcular el número máximo de subredes que se pueden acomodar con la nueva máscara de subred
+    max_subnets = 2**(new_prefix_length-prefix_length)
+
+    # Asegurarse de que num_subnets no sea mayor que max_subnets
+    if num_subnets > max_subnets:
+        print(f"Solo se pueden acomodar {max_subnets} subredes con la nueva máscara de subred. Se usarán {max_subnets} subredes.")
+        num_subnets = max_subnets
+
+    # Dividir la red en subredes y mostrar los resultados
+    print("Subredes:")
+    for i, subnet in enumerate(new_network.subnets(num_subnets), 1):
+    # El resto del código aquí
+
+        print(f"Subred {i}: {subnet}, Saltos: {jump}, Cantidad de hosts: {num_hosts}")
+'''
+
+
+import ipaddress
+
+def calculate_subnetting(ip_address, num_subnets, max_hosts_per_subnet):
+    # Convertimos la dirección IP en un objeto de la clase IPv4Address
+    ip = ipaddress.IPv4Address(ip_address)
+    
+    # Calculamos la máscara de subred que se utilizará
+    mask_length = ip.max_prefixlen - num_subnets.bit_length()
+    subnet_mask = ipaddress.IPv4Network(f"{ip}/{mask_length}").netmask
+    
+    # Obtenemos la cantidad de hosts por subred y la cantidad total de subredes
+    hosts_per_subnet = max_hosts_per_subnet + 2 # Se suman 2 porque se reservan las direcciones de red y broadcast
+    total_subnets = 2 ** num_subnets
+    
+    # Imprimimos los resultados
+    print(f"Dirección IP base: {ip}")
+    print(f"Máscara de subred: {subnet_mask}")
+    print(f"Cantidad de hosts por subred: {hosts_per_subnet}")
+    print(f"Cantidad total de subredes: {total_subnets}")
+    
+    # Calculamos y mostramos las direcciones de red y broadcast de cada subred
+    for i in range(total_subnets):
+        subnet_ip = ipaddress.IPv4Address(int(ip) + i * hosts_per_subnet)
+        broadcast_ip = ipaddress.IPv4Address(int(subnet_ip) + hosts_per_subnet - 1)
+        print(f"\nSubred {i+1}:")
+        print(f"Dirección de red: {subnet_ip}")
+        print(f"Dirección de broadcast: {broadcast_ip}")
+        print(f"Rango de direcciones disponibles: {subnet_ip+1} - {broadcast_ip-1}")
+        
+# Pedimos al usuario que ingrese la dirección IP, cantidad de subredes y cantidad máxima de hosts por subred
+ip_address = input("Ingrese la dirección IP base en formato CIDR (por ejemplo, 192.168.0.0/24): ")
+num_subnets = int(input("Ingrese la cantidad de subredes que desea crear: "))
+max_hosts_per_subnet = int(input("Ingrese la cantidad máxima de hosts necesarios por subred: "))
+
+# Llamamos a la función para calcular el plan de subneting
+calculate_subnetting(ip_address, num_subnets, max_hosts_per_subnet)
